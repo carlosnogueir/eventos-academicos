@@ -2,44 +2,42 @@
 
 ## Instalação e execução no Windows
 
-### 1. Crie e ative o ambiente virtual
+### 1. Instale o Python e crie o ambiente virtual
 
-Abra o PowerShell na pasta `meuProjeto`, onde ficam `app.py` e `requirements.txt`. Se o PowerShell abriu na pasta `Desenvolvimento_WebII`, entre no projeto com `cd .\meuProjeto`. Use o Python 3.14, versão usada nos testes do projeto.
+Instale o [Python 3.14](https://www.python.org/downloads/) com o `pip` e a opção **Add Python to PATH**. Depois da instalação, abra um novo PowerShell na pasta deste projeto, onde ficam `app.py` e `requirements.txt`.
 
 ```powershell
 python --version
 python -m venv .venv
-.\.venv\Scripts\Activate.ps1
 ```
 
-Crie o ambiente na primeira configuração. Em um novo terminal, basta ativar a `.venv` existente.
+Crie o ambiente apenas na primeira configuração. Os comandos abaixo usam o Python da `.venv` diretamente, sem precisar ativá-la nem alterar a política de execução do PowerShell. Se `python` não for reconhecido, tente `py -3.14` nos dois comandos acima ou confira a instalação e o PATH.
 
 ### 2. Instale as bibliotecas
 
-Com a `.venv` ativa, instale o Flask, o Flask-SQLAlchemy e as demais dependências nas versões registradas em [`requirements.txt`](requirements.txt).
+Instale o Flask, o Flask-SQLAlchemy e as demais dependências nas versões registradas em [`requirements.txt`](requirements.txt).
 
 ```powershell
-python -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
 ### 3. Inicie o servidor
 
 ```powershell
-python app.py
-```
-
-Abra [http://127.0.0.1:5000](http://127.0.0.1:5000), clique em **Criar conta** e entre com seu e-mail e sua senha. O SQLite cria o arquivo `instance/banco.db` na primeira execução. Para parar o servidor, pressione **Ctrl+C** no terminal.
-
-Se o PowerShell bloquear a execução de `Activate.ps1`, estes comandos usam o Python da `.venv` diretamente.
-
-```powershell
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe app.py
 ```
 
+Abra [http://127.0.0.1:5000](http://127.0.0.1:5000), clique em **Criar conta**, conclua o cadastro e entre com seu e-mail e sua senha. O SQLite cria o arquivo `instance/banco.db` e as tabelas automaticamente na primeira execução; não é necessário instalar um servidor de banco de dados. Para parar o servidor, pressione **Ctrl+C** no terminal.
+
+Nas próximas execuções, abra o PowerShell na pasta do projeto e repita apenas o comando de inicialização do passo 3. Reinstale as dependências quando o `requirements.txt` mudar.
+
+O servidor acima é para desenvolvimento local. A chave de sessão é gerada ao iniciar, então será necessário entrar novamente após reiniciá-lo. Para manter as sessões entre reinicializações, defina uma variável de ambiente `SECRET_KEY` com um valor longo, aleatório e privado antes de iniciar.
+
+Se a porta 5000 estiver ocupada, execute `.\.venv\Scripts\python.exe -m flask --app app run --port 5001` e acesse [http://127.0.0.1:5001](http://127.0.0.1:5001).
+
 ### 4. Crie uma conta de coordenação para testar a exclusão
 
-Em um segundo PowerShell na pasta `meuProjeto`, execute o comando abaixo com um e-mail diferente do usado na conta comum. O terminal solicita e confirma a senha. Em seguida, entre no site com essa conta.
+Este passo é opcional para cadastrar e editar eventos. Para também poder excluí-los, abra um segundo PowerShell na pasta do projeto e execute o comando abaixo com um e-mail diferente do usado na conta comum. O terminal solicita e confirma a senha. Em seguida, entre no site com essa conta.
 
 ```powershell
 .\.venv\Scripts\python.exe -m flask --app app criar-admin --email coordenacao@exemplo.com
